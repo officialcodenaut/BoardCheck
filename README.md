@@ -117,4 +117,5 @@ with issues used to track planned work and defects.
 
 ## License
 
-The project license will be selected before the first public release.
+BoardCheck is licensed under the GNU General Public License
+v3.0. See [LICENSE](LICENSE) for details.
