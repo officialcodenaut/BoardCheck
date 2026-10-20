@@ -20,9 +20,29 @@
 
 #include <cstdio>
 #include <opencv2/core.hpp>
+#include <CLI/CLI.hpp>
+#include <string>
 
-int main()
+int main(int argc, char* argv[])
 {
+    CLI::App cli;
+    cli.get_formatter()->column_width(45);
+    argv = cli.ensure_utf8(argv);
+    std::string referencePath;
+    std::string testPath;
+
+    cli.add_option("--reference", referencePath, "Path to reference image")->required();
+    cli.add_option("--test", testPath, "Path to test image")->required();
+
+    try
+    {
+        cli.parse(argc, argv);
+    } 
+    catch(const CLI::ParseError& e) 
+    {
+        return cli.exit(e);
+    }
+    
     std::printf("BoardCheck v0.1.0\n");
     std::printf("OpenCV version: %s\n", CV_VERSION);
     return 0;
