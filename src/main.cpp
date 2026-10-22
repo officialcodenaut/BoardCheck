@@ -18,12 +18,13 @@
  * along with BoardCheck. If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <CLI/CLI.hpp>
 #include <cstdio>
 #include <opencv2/core.hpp>
-#include <CLI/CLI.hpp>
+#include <opencv2/imgcodecs.hpp>
 #include <string>
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
     CLI::App cli;
     cli.get_formatter()->column_width(45);
@@ -37,13 +38,36 @@ int main(int argc, char* argv[])
     try
     {
         cli.parse(argc, argv);
-    } 
-    catch(const CLI::ParseError& e) 
+    }
+    catch (const CLI::ParseError &e)
     {
         return cli.exit(e);
     }
-    
-    std::printf("BoardCheck v0.1.0\n");
-    std::printf("OpenCV version: %s\n", CV_VERSION);
+
+    cv::Mat reference, test;
+
+    reference = cv::imread(referencePath);
+    if (reference.empty())
+    {
+        std::fprintf(stderr, "Error: failed to load reference image: %s\n", referencePath.c_str());
+        return 3;
+    }
+
+    test = cv::imread(testPath);
+    if (test.empty())
+    {
+        std::fprintf(stderr, "Error: failed to load test image: %s\n", testPath.c_str());
+        return 3;
+    }
+
+    std::printf("Size of reference image: %d x %d\n", reference.cols, reference.rows);
+    std::printf("Size of test image: %d x %d\n", test.cols, test.rows);
+
+    if (reference.size() != test.size())
+    {
+        std::fprintf(stderr, "Error: Images are not equal in size\n");
+        return 4;
+    }
+
     return 0;
 }
