@@ -11,6 +11,17 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+include(FetchContent)
+
+FetchContent_Declare(
+    CLI11
+    GIT_REPOSITORY https://github.com/CLIUtils/CLI11.git
+    GIT_TAG v2.7.2
+    GIT_SHALLOW TRUE
+)
+
+FetchContent_MakeAvailable(CLI11)
+
 find_package(OpenCV REQUIRED)
 
 add_executable(BoardCheck
@@ -26,6 +37,7 @@ target_include_directories(BoardCheck
 target_link_libraries(BoardCheck
     PRIVATE
         ${OpenCV_LIBS}
+        CLI11::CLI11
 )
 
 message(STATUS "BoardCheck version: ${PROJECT_VERSION}")
