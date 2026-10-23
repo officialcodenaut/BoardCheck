@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
     std::string referencePath;
     std::string testPath;
 
-    cli.add_option("--reference", referencePath, "Path to reference image")->required();
+    cli.add_option("--reference, --ref", referencePath, "Path to reference image")->required();
     cli.add_option("--test", testPath, "Path to test image")->required();
 
     try
