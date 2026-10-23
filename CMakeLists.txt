@@ -43,20 +43,16 @@ target_link_libraries(boardcheck
 message(STATUS "BoardCheck version: ${PROJECT_VERSION}")
 message(STATUS "OpenCV version: ${OpenCV_VERSION}")
 
-add_executable(GenerateTestImages
+add_executable(generate-test-images
     tools/generate_test_images.cpp
 )
 
-set_target_properties(GenerateTestImages PROPERTIES
-    OUTPUT_NAME generate-test-images
-)
-
-target_include_directories(GenerateTestImages
+target_include_directories(generate-test-images
     PRIVATE
         ${OpenCV_INCLUDE_DIRS}
 )
 
-target_link_libraries(GenerateTestImages
+target_link_libraries(generate-test-images
     PRIVATE
         ${OpenCV_LIBS}
 )
