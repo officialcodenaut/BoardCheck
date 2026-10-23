@@ -24,17 +24,17 @@ FetchContent_MakeAvailable(CLI11)
 
 find_package(OpenCV REQUIRED)
 
-add_executable(BoardCheck
+add_executable(boardcheck
     src/main.cpp
 )
 
-target_include_directories(BoardCheck
+target_include_directories(boardcheck
     PRIVATE
         ${OpenCV_INCLUDE_DIRS}
         ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-target_link_libraries(BoardCheck
+target_link_libraries(boardcheck
     PRIVATE
         ${OpenCV_LIBS}
         CLI11::CLI11
@@ -43,16 +43,16 @@ target_link_libraries(BoardCheck
 message(STATUS "BoardCheck version: ${PROJECT_VERSION}")
 message(STATUS "OpenCV version: ${OpenCV_VERSION}")
 
-add_executable(GenerateTestImages
+add_executable(generate-test-images
     tools/generate_test_images.cpp
 )
 
-target_include_directories(GenerateTestImages
+target_include_directories(generate-test-images
     PRIVATE
         ${OpenCV_INCLUDE_DIRS}
 )
 
-target_link_libraries(GenerateTestImages
+target_link_libraries(generate-test-images
     PRIVATE
         ${OpenCV_LIBS}
 )
