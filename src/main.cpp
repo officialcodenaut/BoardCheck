@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
     std::string referencePath;
     std::string testPath;
 
-    auto *demoCommand = cli.add_subcommand("demo", "Run a demonstration");
+    auto *demoCommand = cli.add_subcommand("demo", "Generate synthetic PCB demo images");
 
     auto *referenceOption = cli.add_option("--reference, --ref", referencePath, "Path to reference image");
 
