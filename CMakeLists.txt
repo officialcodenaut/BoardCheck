@@ -26,6 +26,8 @@ find_package(OpenCV REQUIRED)
 
 add_executable(boardcheck
     src/main.cpp
+    src/test_images.cpp
+    include/boardcheck/test_images.hpp
 )
 
 target_include_directories(boardcheck
@@ -45,11 +47,14 @@ message(STATUS "OpenCV version: ${OpenCV_VERSION}")
 
 add_executable(generate-test-images
     tools/generate_test_images.cpp
+    src/test_images.cpp
+    include/boardcheck/test_images.hpp
 )
 
 target_include_directories(generate-test-images
     PRIVATE
         ${OpenCV_INCLUDE_DIRS}
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
 target_link_libraries(generate-test-images

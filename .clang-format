@@ -5,7 +5,9 @@ Language: Cpp
 BreakBeforeBraces: Allman
 
 IndentWidth: 4
+NamespaceIndentation: All
 TabWidth: 4
 UseTab: Never
 
-ColumnLimit: 100
+ColumnLimit: 150
+FixNamespaceComments: false
