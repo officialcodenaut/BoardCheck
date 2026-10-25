@@ -18,22 +18,29 @@
  * along with BoardCheck. If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "boardcheck/test_images.hpp"
+ 
 #include <CLI/CLI.hpp>
 #include <cstdio>
 #include <opencv2/core.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <string>
+#include <filesystem>
 
 int main(int argc, char *argv[])
 {
-    CLI::App cli;
-    cli.get_formatter()->column_width(45);
+    CLI::App cli{"PCB visual inspection using computer vision"};
+    cli.get_formatter()->column_width(60);
     argv = cli.ensure_utf8(argv);
+
     std::string referencePath;
     std::string testPath;
 
-    cli.add_option("--reference, --ref", referencePath, "Path to reference image")->required();
-    cli.add_option("--test", testPath, "Path to test image")->required();
+    auto *demoCommand = cli.add_subcommand("demo", "Generate synthetic PCB demo images");
+
+    auto *referenceOption = cli.add_option("--reference, --ref", referencePath, "Path to reference image");
+
+    auto *testOption = cli.add_option("--test", testPath, "Path to test image");
 
     try
     {
@@ -42,6 +49,96 @@ int main(int argc, char *argv[])
     catch (const CLI::ParseError &e)
     {
         return cli.exit(e);
+    }
+
+    if (demoCommand->parsed())
+    {
+        if (!referenceOption->empty() || !testOption->empty())
+        {
+            std::fprintf(stderr, "Error: --reference and --test cannot be used with demo.\n");
+            return 2;
+        }
+
+        const std::filesystem::path demoDirectory = "build/demo-data";
+
+        const auto referencePath = demoDirectory / "reference.png";
+        const auto testPath = demoDirectory / "test.png";
+        const auto higherResolutionPath = demoDirectory / "test_higher_resolution.png";
+
+        const bool filesExist = 
+            std::filesystem::exists(referencePath) ||
+            std::filesystem::exists(testPath) ||
+            std::filesystem::exists(higherResolutionPath);
+
+        bool overwrite = false;
+
+        if(filesExist)
+        {
+            char answer[32];
+
+            while(true)
+            {
+                std::printf(
+                    "Demo images already exist in \"%s\".\n"
+                    "Overwrite existing files? [y/N]: ",
+                    demoDirectory.string().c_str());
+
+                if(std::fgets(answer, sizeof(answer), stdin) == nullptr)
+                {
+                    std::printf("\nDemo cancelled.\n");
+                    return 0;
+                }
+
+                if(answer[0] == 'y' || answer[0] == 'Y')
+                {
+                    overwrite = true;
+                    break;
+                }
+
+                if(answer[0] == '\n' ||
+                   answer[0] == 'n' ||
+                   answer[0] == 'N')
+                {
+                    std:;printf("Demo cancelled\n");
+                    return 0;
+                }
+
+                std::printf("Please answer y or n.\n");
+            }
+        }
+
+        try
+        {
+            const boardcheck::TestImages images = 
+                boardcheck::generateTestImages();
+
+            if (!boardcheck::saveTestImages(images, demoDirectory, overwrite))
+            {
+                std::fprintf(stderr, "Error: failed to save demo images.\n");
+                return 5;
+            }
+        }
+        catch(const std::filesystem::filesystem_error &e)
+        {
+            std::fprintf(stderr, "Error: filesystem operation failed: %s\n", e.what());
+            return 5;
+        }
+        catch(const cv::Exception &e)
+        {
+            std::fprintf(stderr, "Error: OpenCV operation failed: %s\n", e.what());
+            return 5;
+        }
+
+        std::printf("Demo images saved to \"%s\".\n",
+            demoDirectory.string().c_str());
+        
+        return 0;
+    }
+
+    if (referenceOption->empty() || testOption->empty())
+    {
+        std::fprintf(stderr, "Error: both --reference and --test are required.\n");
+        return 2;
     }
 
     cv::Mat reference, test;
