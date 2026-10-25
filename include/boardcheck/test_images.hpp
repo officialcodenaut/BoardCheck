@@ -1,6 +1,7 @@
 #pragma once
 
 #include <opencv2/core.hpp>
+#include <filesystem>
 
 namespace boardcheck
 {
@@ -12,4 +13,10 @@ namespace boardcheck
     };
 
     TestImages generateTestImages();
+
+    bool saveTestImages(
+        const TestImages &images,
+        const std::filesystem::path &directory,
+        bool overwrite
+    );
 }

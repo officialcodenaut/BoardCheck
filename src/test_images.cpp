@@ -1,6 +1,8 @@
 #include "boardcheck/test_images.hpp"
 
+#include <filesystem>
 #include <opencv2/imgproc.hpp>
+#include <opencv2/imgcodecs.hpp>
 
 namespace boardcheck
 {
@@ -25,5 +27,24 @@ namespace boardcheck
         cv::circle(images.testHigherResolution, cv::Point(270, 420), 40, cv::Scalar(0, 0, 255), -1);
 
         return images;
+    }
+
+    bool saveTestImages(const TestImages &images, const std::filesystem::path &directory, bool overwrite)
+    {
+        const auto referencePath = directory / "reference.png";
+        const auto testPath = directory / "test.png";
+        const auto higherResolutionPath = directory / "test_higher_resolution.png";
+
+        if (!overwrite &&
+            (std::filesystem::exists(referencePath) || std::filesystem::exists(testPath) || std::filesystem::exists(higherResolutionPath)))
+        {
+            return false;
+        }
+
+        std::filesystem::create_directories(directory);
+
+        return cv::imwrite(referencePath.string(), images.reference) && 
+               cv::imwrite(testPath.string(), images.test) &&
+               cv::imwrite(higherResolutionPath.string(), images.testHigherResolution);
     }
 }
