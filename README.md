@@ -1,18 +1,14 @@
-
 # BoardCheck
 
 **PCB Visual Inspection | C++17 · OpenCV · CMake**
 
-BoardCheck is an experimental computer vision project focused on
-detecting and localizing visual differences between a reference
-printed circuit board (PCB) image and a test image.
+BoardCheck is an open-source computer vision project focused on detecting and localizing visual differences between a reference printed circuit board (PCB) image and a test image.
 
-The goal is to build a practical image inspection pipeline while
-exploring image registration, image processing, feature matching,
-and quantitative evaluation in modern C++.
+The goal is to develop a practical image inspection pipeline while exploring image registration, image processing, feature matching, and quantitative evaluation in modern C++.
 
-> **Project status:** Initial setup. The build configuration is
-> working; the inspection pipeline has not been implemented yet.
+> **Project status:** Early development — currently on hold while work continues on other projects. BoardCheck is not abandoned and development is expected to resume.
+>
+> The `main` branch contains the stable project baseline. More recent development work is available on [`dev`](../../tree/dev) and dedicated feature branches.
 
 ## Goals
 
@@ -25,28 +21,41 @@ and quantitative evaluation in modern C++.
 
 ## Scope
 
-BoardCheck focuses on **visual inspection**, not electrical
-verification.
+BoardCheck focuses on **visual inspection**, not electrical verification.
 
-A visual difference does not necessarily indicate an electrical
-defect, and the absence of detected visual differences does not
-guarantee that a PCB is electrically correct.
+A visual difference does not necessarily indicate an electrical defect, and the absence of detected visual differences does not guarantee that a PCB is electrically correct.
 
-The project is experimental and is not intended to replace
-professional PCB inspection or electrical testing systems.
+The project is experimental and is not intended to replace professional PCB inspection or electrical testing systems.
 
 ## Technology Stack
 
 - C++17
 - OpenCV
 - CMake
+- CLI11 (development branches)
 - Git and GitHub
+
+## Current Development Progress
+
+The project has progressed beyond its initial setup. Work completed across development branches includes:
+
+- [x] Initial project structure and CMake configuration
+- [x] OpenCV integration
+- [x] Command-line interface using CLI11
+- [x] Image loading and input validation
+- [x] Synthetic PCB test image generator
+- [x] Basic pixel-wise image comparison module
+- [x] Initial automated tests for image comparison
+
+The comparison module and its tests are currently implemented on `feature/image-comparison` and are not yet integrated into the `main` branch.
+
+The full inspection pipeline is not yet operational.
 
 ## Building
 
-The project is developed with CMake and a C++17-compatible compiler.
+The project uses CMake and requires a C++17-compatible compiler.
 
-Configure the project:
+Configure:
 
 ```powershell
 cmake -S . -B build
@@ -58,39 +67,33 @@ Build:
 cmake --build build
 ```
 
-For a clean rebuild:
+Clean rebuild:
 
 ```powershell
 cmake --build build --clean-first
 ```
 
-Run the current executable on Windows:
-
-```powershell
-.\build\BoardCheck.exe
-```
-
 OpenCV must be installed and discoverable by CMake.
+
+**Note:** The available executable targets and command-line options depend on the branch being built. Refer to the README on the corresponding development branch for its usage instructions.
 
 ## Planned Development
 
-The following stages describe the intended direction, not
-implemented features.
+The following stages describe the intended direction of the project:
 
-- [x] Initial project structure
-- [x] CMake configuration and OpenCV integration
-- [ ] Define image input and output conventions
-- [ ] Implement basic image comparison
+- [ ] Integrate image comparison into the application workflow
+- [ ] Generate binary difference masks
 - [ ] Explore and evaluate image registration
-- [ ] Localize differences in the output image
-- [ ] Add automated tests
-- [ ] Evaluate the pipeline on labeled PCB images
-- [ ] Introduce structured reports and command-line options
+- [ ] Localize and visualize detected differences
+- [ ] Evaluate detection quality using labeled PCB images
+- [ ] Introduce structured inspection reports
+- [ ] Expand automated tests and regression coverage
 
-The implementation order may change as experiments reveal
-technical limitations or better approaches.
+The implementation order may change as experiments reveal technical limitations or better approaches.
 
 ## Repository Structure
+
+The baseline project structure is:
 
 ```text
 BoardCheck/
@@ -104,18 +107,20 @@ BoardCheck/
 └── README.md
 ```
 
-## Development
+Additional tools and modules are being developed on other branches.
 
-The project uses a branch-based Git workflow:
+## Development Workflow
 
-- `main` contains stable, reviewed changes.
-- `dev` integrates completed features.
-- `feature/*` branches isolate individual tasks.
+BoardCheck uses a branch-based Git workflow:
 
-Changes are intended to be reviewed through pull requests,
-with issues used to track planned work and defects.
+- `main` — stable, reviewed project baseline.
+- `dev` — integration branch for completed development work.
+- `feature/*` — isolated development of individual features.
+
+For the latest integrated development progress, see the [`dev` branch](../../tree/dev).
+
+Changes are intended to be reviewed through pull requests, with issues used to track planned work and defects.
 
 ## License
 
-BoardCheck is licensed under the GNU General Public License
-v3.0. See [LICENSE](LICENSE) for details.
+BoardCheck is licensed under the **GNU General Public License v3.0**. See [LICENSE](LICENSE) for details.
